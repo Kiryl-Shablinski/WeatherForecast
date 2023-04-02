@@ -11,25 +11,36 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.json.*;
 
 public class HelloController {
     @FXML
     private Label welcomeText;
+    @FXML
+    private ImageView imageView;
 
     @FXML
-    private ComboBox<String> box;
+    private TextField inputCity;
+    private String key;
+  //  @FXML
+  //  private ComboBox<String> box;
+
+
 
     @FXML
-    void initialize(){
-        ObservableList<String> items = FXCollections.observableArrayList(initialBox());
-        box.setItems(items);
+    void initialize() {
+    //    ObservableList<String> items = FXCollections.observableArrayList(initialBox());
+    //    box.setItems(items);
+        key = ConfigApi.getKey();
     }
-
     @FXML
     protected void onHelloButtonClick() throws IOException {
 
-        String cityName = box.getValue();
+       /* String cityName = box.getValue();
         String lat = "0", lon = "0";
 
         List<City> cityList = init();
@@ -40,12 +51,13 @@ public class HelloController {
                 break;
             }
         }
-
-
-        URL url =
-                new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=d873275a4d4bfd46908304cdbfb0cad4");
+      /*  URL url =
+                new URL("https://api.openweathermap.org/data/2.5/weather?lat=" +
+                        lat + "&lon=" + lon + "&appid=" + key );
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
         String str = reader.readLine();
+        */
+        String str = cityName(inputCity.getText());
 
         JSONObject jsonObject = new JSONObject(str);
         JSONObject jsonMain  = (JSONObject) jsonObject.get("main");
@@ -89,11 +101,21 @@ public class HelloController {
                 .toList();
     }
 
+    private  String cityName(String  cityName) {
+        String infoJson = null;
+        try {
+            URL url = url = new URL("" +
+                    "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + key);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            infoJson = reader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return infoJson;
+    }
 
 
-
-
-
-
-
+        private Image imageWeather(){
+return null;
+    }
 }

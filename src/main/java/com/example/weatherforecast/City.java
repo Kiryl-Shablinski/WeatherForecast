@@ -1,8 +1,5 @@
 package com.example.weatherforecast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class City {
     private String name;
     private String lat;
