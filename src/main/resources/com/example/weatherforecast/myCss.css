@@ -1,0 +1,8 @@
+.button{
+    -fx-background-color: #81cc81;
+}
+.bGround{
+    /*-fx-background-image: url("images/nebo_oblaca_solnce.jpg");*/
+    -fx-background-size: 100%;
+    -fx-background-color: #7cab92;
+}

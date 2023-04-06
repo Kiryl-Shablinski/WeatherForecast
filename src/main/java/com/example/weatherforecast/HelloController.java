@@ -21,11 +21,12 @@ public class HelloController {
     @FXML
     private Label welcomeText;
     @FXML
-    private ImageView imageView;
+    private ImageView imageBground;
 
     @FXML
     private TextField inputCity;
     private String key;
+    private Enum cloudy;
   //  @FXML
   //  private ComboBox<String> box;
 
@@ -40,17 +41,6 @@ public class HelloController {
     @FXML
     protected void onHelloButtonClick() throws IOException {
 
-       /* String cityName = box.getValue();
-        String lat = "0", lon = "0";
-
-        List<City> cityList = init();
-        for(City c : cityList){
-            if (cityName.equals(c.getName())){
-                lat = c.getLat();
-                lon = c.getLon();
-                break;
-            }
-        }
       /*  URL url =
                 new URL("https://api.openweathermap.org/data/2.5/weather?lat=" +
                         lat + "&lon=" + lon + "&appid=" + key );
@@ -61,6 +51,7 @@ public class HelloController {
 
         JSONObject jsonObject = new JSONObject(str);
         JSONObject jsonMain  = (JSONObject) jsonObject.get("main");
+        JSONObject jsonCloud = (JSONObject) jsonObject.get("clouds");
 
         //абсолютный ноль в Кельвинах
         double absolutelyNull = 273.15;String temp = String.valueOf(jsonMain.get("temp"));
@@ -69,12 +60,17 @@ public class HelloController {
       String pressure = String.valueOf(jsonMain.get("pressure"));
       String humidity = String.valueOf(jsonMain.get("humidity"));
       String wind = String.valueOf(((JSONObject)jsonObject.get("wind")).get("speed"));
+      String apiClouds = String.valueOf(jsonCloud.get("all"));
+      setCloudy(Integer.parseInt(apiClouds));
+      setBground((Cloudy) cloudy);
+
       StringBuilder stb = new StringBuilder();
       stb.append("Текущая температура ").append(Math.round(Double.parseDouble(temp) - absolutelyNull)).append("\u00B0C\n");
       stb.append("Ощущается как ").append(Math.round(Double.parseDouble(feelsTemp) - absolutelyNull)).append("\u00B0C\n");
       stb.append("Давление ").append(Math.round(Double.parseDouble(pressure) / 1.333)).append(" мм.рт.ст\n");
       stb.append("Влажность ").append(humidity).append("%\n");
-      stb.append("Скорость ветра ").append(Math.round(Double.parseDouble(wind) / 1000 * 3600)).append("км/ч");
+      stb.append("Скорость ветра ").append(Math.round(Double.parseDouble(wind) / 1000 * 3600)).append("км/ч\n");
+      stb.append("Облачность ").append(apiClouds).append("%");
 
         welcomeText.setText(stb.toString());
     }
@@ -112,6 +108,28 @@ public class HelloController {
             throw new RuntimeException(e);
         }
         return infoJson;
+    }
+
+    public void setCloudy(int apiCloudy){
+       cloudy = apiCloudy > 0 && apiCloudy <30 ? Cloudy.SUNNY :
+               apiCloudy >= 30 && apiCloudy < 80 ? Cloudy.PARTLY_CLOUDY : Cloudy.CLOUDY;
+    }
+
+
+    public void setBground(Cloudy cloudy){
+        switch (cloudy){
+            case SUNNY :
+                imageBground.setImage(new Image("/images/sunny.jpg"));
+                break;
+
+            case PARTLY_CLOUDY :
+                imageBground.setImage(new Image("/images/nebo_oblaca_solnce.jpg"));
+                break;
+
+            case CLOUDY :
+                imageBground.setImage(new Image("/images/cloudy.jpg"));
+            break;
+        }
     }
 
 
